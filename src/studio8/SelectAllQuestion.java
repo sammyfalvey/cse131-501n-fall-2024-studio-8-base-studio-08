@@ -3,14 +3,28 @@ package studio8;
 public class SelectAllQuestion extends MultipleChoiceQuestion {
 
 	public SelectAllQuestion(String prompt, String answer, String[] choices) {
-		//Hint: 1 point per choice
-		//FIXME
-	}
+		// Call the constructor of MultipleChoiceQuestion
+        super(prompt, answer, points, choices);
+    }
 	
 	public int checkAnswer(String givenAnswer) {
-		//FIXME Should return partial credit (if earned)!
-		return 0;
-	}
+		int totalPoints = this.getChoices().length;  // Full points for each choice
+        int pointsDeducted = 0;
+
+        // Calculate missing correct answers
+        int missingCorrectAnswers = findMissingCorrectAnswers(givenAnswer);
+        pointsDeducted += missingCorrectAnswers;
+
+        // Calculate incorrect given answers
+        int incorrectGivenAnswers = findIncorrectGivenAnswers(givenAnswer);
+        pointsDeducted += incorrectGivenAnswers;
+
+        // Calculate the total score by deducting points
+        int score = totalPoints - pointsDeducted;
+
+        // Ensure the score is not negative
+        return Math.max(0, score);
+    }
 
 	private int findMissingCorrectAnswers(String givenAnswer) {
 		String answer = this.getAnswer();
